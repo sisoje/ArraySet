@@ -1,6 +1,6 @@
 //
-//  RHBAVLTreeTests.swift
-//  RHBAVLTreeTests
+//  ArraySetTestCase.swift
+//  ArraySetTests
 //
 //  Created by Lazar Otasevic on 7/27/19.
 //  Copyright © 2019 lazar. All rights reserved.
@@ -49,7 +49,7 @@ extension TrivialSortedArray: ArraySetProtocol {
     }
 }
 
-class RHBAVLTreeTests: XCTestCase {
+class ArraySetTestCase: XCTestCase {
     func testBalance() {
         for N in 1...10 {
             let elements = Array(1..<(1 << N))
