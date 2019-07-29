@@ -7,15 +7,7 @@
 //
 
 @testable import ArraySet
-import GameplayKit
 import XCTest
-
-func makeElements(_ len: Int) -> [Int] {
-    let mt = GKMersenneTwisterRandomSource(seed: 55)
-    return (0 ..< len).map { _ in
-        mt.nextInt()
-    }
-}
 
 class ArraySetTestCase: XCTestCase {
     func testBalance() {
@@ -64,7 +56,7 @@ class ArraySetTestCase: XCTestCase {
     }
 
     func testRemove() {
-        let elements = makeElements(100)
+        let elements = [Int].makeRandom(100)
         elements.enumerated().forEach { index, _ in
             let tree = ArraySet<Int>()
             elements.forEach(tree.insertElement)
@@ -76,7 +68,7 @@ class ArraySetTestCase: XCTestCase {
     }
 
     func testRhb() {
-        let elements = makeElements(10000)
+        let elements = [Int].makeRandom(10000)
         let tree = ArraySet<Int>()
         elements.forEach(tree.insertElement)
         XCTAssertEqual(tree.elements, elements.sorted())
@@ -88,7 +80,7 @@ class ArraySetTestCase: XCTestCase {
 
     func testTrivial() {
         let tree = TrivialArraySet<Int>()
-        tree.elements = makeElements(10000).sorted()
+        tree.elements = [Int].makeRandom(10000).sorted()
         measure {
             (0 ..< tree.count).forEach { _ in
                 tree.removeAtIndex(tree.count / 100)
