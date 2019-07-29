@@ -147,12 +147,6 @@ extension ArraySetNode {
         return (left?.elements() ?? []) + [element] + (right?.elements() ?? [])
     }
 
-    func print() -> String {
-        let lprint = left?.print() ?? ""
-        let rprint = right?.print() ?? ""
-        return "[\(lprint)]<-\(element)->[\(rprint)]"
-    }
-
     func addSize(_ val: Int) {
         size += val
         parent?.addSize(val)

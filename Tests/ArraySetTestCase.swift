@@ -73,7 +73,9 @@ class ArraySetTestCase: XCTestCase {
         elements.forEach(tree.insertElement)
         XCTAssertEqual(tree.elements, elements.sorted())
         measure {
-            elements.forEach(tree.removeElement)
+            (0 ..< tree.count).forEach { _ in
+                tree.removeAtIndex(tree.count / 100)
+            }
             XCTAssertEqual(tree.elements, [])
         }
     }
