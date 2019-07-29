@@ -19,7 +19,7 @@ public protocol ArraySetProtocol {
     func removeAtIndex(_ index: Int)
 }
 
-extension ArraySetProtocol {
+public extension ArraySetProtocol {
     var isEmpty: Bool {
         return count == 0
     }

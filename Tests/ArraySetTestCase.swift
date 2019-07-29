@@ -16,38 +16,6 @@ func makeElements(_ len: Int) -> [Int] {
         mt.nextInt()
     }
 }
-class TrivialSortedArray<T: Comparable & Equatable> {
-    var elements: [T] = []
-}
-
-extension TrivialSortedArray: ArraySetProtocol {
-    func removeAtIndex(_ index: Int) {
-        elements.remove(at: index)
-    }
-
-    var count: Int {
-        return elements.count
-    }
-
-    subscript(index: Int) -> T {
-        return elements[index]
-    }
-
-    func firstIndexOfElement(_ element: T) -> Int? {
-        return elements.firstIndex(of: element)
-    }
-
-    func insertElement(_ element: T) {
-        elements.append(element)
-        elements.sort()
-    }
-
-    func removeElement(_ element: T) {
-        if let index = elements.firstIndex(of: element) {
-            elements.remove(at: index)
-        }
-    }
-}
 
 class ArraySetTestCase: XCTestCase {
     func testBalance() {
@@ -120,7 +88,7 @@ class ArraySetTestCase: XCTestCase {
     }
 
     func testTrivial() {
-        let tree = TrivialSortedArray<Int>()
+        let tree = TrivialArraySet<Int>()
         tree.elements = makeElements(10000).sorted()
         measure {
             (0..<tree.count).forEach { _ in

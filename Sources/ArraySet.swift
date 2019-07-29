@@ -8,32 +8,41 @@
 
 import Foundation
 
-class ArraySet<T> {
+public class ArraySet<T> {
     var root: ArraySetNode<T>?
     let comparator: (T, T) -> Bool
     let equalizer: (T, T) -> Bool
-    init(comparator: @escaping (T, T) -> Bool, equalizer: @escaping (T, T) -> Bool) {
+
+    public init(comparator: @escaping (T, T) -> Bool, equalizer: @escaping (T, T) -> Bool) {
         self.comparator = comparator
         self.equalizer = equalizer
     }
 }
 
-extension ArraySet where T: Comparable {
+public extension ArraySet where T: Comparable {
     convenience init() {
         self.init(comparator: <, equalizer: ==)
     }
 }
 
+extension ArraySet {
+    func removeNode(_ node: ArraySetNode<T>) {
+        node.remove()
+        if root?.size == 0 {
+            root = nil
+        }
+    }
+}
 
 extension ArraySet: ArraySetProtocol {
-    func removeAtIndex(_ index: Int) {
+    public func removeAtIndex(_ index: Int) {
         let node = root?.findNodeWithIndex(index)
         node.map {
             removeNode($0)
         }
     }
 
-    func insertElement(_ element: T) {
+    public func insertElement(_ element: T) {
         let node = ArraySetNode(element: element)
         root?.insertNode(node, comparator: comparator)
         root = root ?? node
@@ -48,34 +57,27 @@ extension ArraySet: ArraySetProtocol {
         }
     }
 
-    func removeNode(_ node: ArraySetNode<T>) {
-        node.remove()
-        if root?.size == 0 {
-            root = nil
-        }
-    }
-
-    func removeElement(_ element: T) {
+    public func removeElement(_ element: T) {
         let node = root?.findNodeWithElement(element, comparator: comparator, equalizer: equalizer)
         node.map {
             removeNode($0)
         }
     }
 
-    func firstIndexOfElement(_ element: T) -> Int? {
+    public func firstIndexOfElement(_ element: T) -> Int? {
         let node = root?.findNodeWithElement(element, comparator: comparator, equalizer: equalizer)
         return node?.index()
     }
 
-    subscript(_ index: Int) -> T {
+    public subscript(_ index: Int) -> T {
         return root!.findNodeWithIndex(index)!.element
     }
 
-    var elements: [T] {
+    public var elements: [T] {
         return root?.elements() ?? []
     }
 
-    var count: Int {
+    public var count: Int {
         return root?.size ?? 0
     }
 }
