@@ -1,6 +1,6 @@
 //
-//  Tree.swift
-//  RHBAVLTree
+//  ArraySetNode.swift
+//  ArraySet
 //
 //  Created by Lazar Otasevic on 7/27/19.
 //  Copyright © 2019 lazar. All rights reserved.
@@ -8,19 +8,19 @@
 
 import Foundation
 
-final class RhbNode<T> {
+final class ArraySetNode<T> {
     var size: Int
     var element: T
-    var left: RhbNode?
-    var right: RhbNode?
-    weak var parent: RhbNode?
+    var left: ArraySetNode?
+    var right: ArraySetNode?
+    weak var parent: ArraySetNode?
     init(element: T, size: Int = 1) {
         self.element = element
         self.size = size
     }
 }
 
-extension RhbNode {
+extension ArraySetNode {
     static func level(size: Int) -> Double {
         return log2(Double(1 + size))
     }
@@ -37,11 +37,11 @@ extension RhbNode {
         return parent.map { 1 + $0.distanceToRoot } ?? 0
     }
 
-    var pathToRoot: [RhbNode] {
+    var pathToRoot: [ArraySetNode] {
         return parent.map { [$0] + $0.pathToRoot } ?? []
     }
 
-    func rotateLeft() -> RhbNode {
+    func rotateLeft() -> ArraySetNode {
         let newTop = right!
         let oldTop = self
         oldTop.replaceInParent(newTop)
@@ -56,7 +56,7 @@ extension RhbNode {
         return newTop
     }
 
-    func rotateRight() -> RhbNode {
+    func rotateRight() -> ArraySetNode {
         let newTop = left!
         let oldTop = self
         oldTop.replaceInParent(newTop)
@@ -72,14 +72,14 @@ extension RhbNode {
     }
 
     var needsBalance: Bool {
-        return abs(RhbNode.level(size: sizeLeft) - RhbNode.level(size: sizeRight)) >= 2
+        return abs(ArraySetNode.level(size: sizeLeft) - ArraySetNode.level(size: sizeRight)) >= 2
     }
 
-    func rotate() -> RhbNode {
+    func rotate() -> ArraySetNode {
         return sizeRight > sizeLeft ? rotateLeft() : rotateRight()
     }
 
-    func insertNode(_ node: RhbNode, comparator: (T, T) -> Bool) {
+    func insertNode(_ node: ArraySetNode, comparator: (T, T) -> Bool) {
         let isLeft = comparator(node.element, element)
         if let child = isLeft ? left : right {
             child.insertNode(node, comparator: comparator)
@@ -93,11 +93,11 @@ extension RhbNode {
         node.parent = self
     }
 
-    func maxNode() -> RhbNode {
+    func maxNode() -> ArraySetNode {
         return right?.maxNode() ?? self
     }
 
-    func minNode() -> RhbNode {
+    func minNode() -> ArraySetNode {
         return left?.minNode() ?? self
     }
 
@@ -113,7 +113,7 @@ extension RhbNode {
         }
     }
 
-    func replaceInParent(_ node: RhbNode?) {
+    func replaceInParent(_ node: ArraySetNode?) {
         if parent?.left === self {
             parent?.left = node
         }
@@ -123,7 +123,7 @@ extension RhbNode {
         node?.parent = parent
     }
 
-    func findNodeWithIndex(_ index: Int) -> RhbNode? {
+    func findNodeWithIndex(_ index: Int) -> ArraySetNode? {
         let sizeLeft = left?.size ?? 0
         if sizeLeft == index {
             return self
@@ -134,7 +134,7 @@ extension RhbNode {
         return right?.findNodeWithIndex(index - sizeLeft - 1)
     }
 
-    func findNodeWithElement(_ element: T, comparator: (T, T) -> Bool, equalizer: (T, T) -> Bool) -> RhbNode? {
+    func findNodeWithElement(_ element: T, comparator: (T, T) -> Bool, equalizer: (T, T) -> Bool) -> ArraySetNode? {
         if equalizer(element, self.element) {
             return self
         }

@@ -20,7 +20,7 @@ class TrivialSortedArray<T: Comparable & Equatable> {
     var elements: [T] = []
 }
 
-extension TrivialSortedArray: SortedArray {
+extension TrivialSortedArray: ArraySetProtocol {
     func removeAtIndex(_ index: Int) {
         elements.remove(at: index)
     }
@@ -53,7 +53,7 @@ class RHBAVLTreeTests: XCTestCase {
     func testBalance() {
         for N in 1...10 {
             let elements = Array(1..<(1 << N))
-            let tree = RhbTree<Int>()
+            let tree = ArraySet<Int>()
             elements.forEach(tree.insertElement)
             let distances: [Int] = elements.map {
                 tree.root!.findNodeWithElement($0, comparator: tree.comparator, equalizer: tree.equalizer)!.distanceToRoot
@@ -63,13 +63,13 @@ class RHBAVLTreeTests: XCTestCase {
     }
 
     func testEmpty() {
-        let tree = RhbTree<Int>()
+        let tree = ArraySet<Int>()
         XCTAssertEqual(tree.count, 0)
         XCTAssert(tree.elements.isEmpty)
     }
 
     func testOne() {
-        let tree = RhbTree<Int>()
+        let tree = ArraySet<Int>()
         let elements = [1]
         elements.forEach(tree.insertElement)
         XCTAssertEqual(tree.count, elements.count)
@@ -81,7 +81,7 @@ class RHBAVLTreeTests: XCTestCase {
     }
 
     func testArray() {
-        let tree = RhbTree<Int>()
+        let tree = ArraySet<Int>()
         let elements = [3,1,5,0,2,4,6]
         elements.forEach(tree.insertElement)
         XCTAssertEqual(tree.root?.left?.size, 3)
@@ -98,7 +98,7 @@ class RHBAVLTreeTests: XCTestCase {
     func testRemove() {
         let elements = makeElements(100)
         elements.enumerated().forEach { index, element in
-            let tree = RhbTree<Int>()
+            let tree = ArraySet<Int>()
             elements.forEach(tree.insertElement)
             var sorted = elements.sorted()
             tree.removeElement(sorted[index])
@@ -109,7 +109,7 @@ class RHBAVLTreeTests: XCTestCase {
 
     func testRhb() {
         let elements = makeElements(10000)
-        let tree = RhbTree<Int>()
+        let tree = ArraySet<Int>()
         elements.forEach(tree.insertElement)
         XCTAssertEqual(tree.elements, elements.sorted())
         measure {
