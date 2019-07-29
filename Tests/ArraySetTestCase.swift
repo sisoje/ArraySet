@@ -6,27 +6,27 @@
 //  Copyright © 2019 lazar. All rights reserved.
 //
 
-import XCTest
 @testable import ArraySet
 import GameplayKit
+import XCTest
 
 func makeElements(_ len: Int) -> [Int] {
     let mt = GKMersenneTwisterRandomSource(seed: 55)
-    return (0..<len).map { _ in
+    return (0 ..< len).map { _ in
         mt.nextInt()
     }
 }
 
 class ArraySetTestCase: XCTestCase {
     func testBalance() {
-        for N in 1...10 {
-            let elements = Array(1..<(1 << N))
+        for N in 1 ... 10 {
+            let elements = Array(1 ..< (1 << N))
             let tree = ArraySet<Int>()
             elements.forEach(tree.insertElement)
             let distances: [Int] = elements.map {
                 tree.root!.findNodeWithElement($0, comparator: tree.comparator, equalizer: tree.equalizer)!.distanceToRoot
             }
-            XCTAssertLessThan(distances.max()!, 2*N)
+            XCTAssertLessThan(distances.max()!, 2 * N)
         }
     }
 
@@ -50,7 +50,7 @@ class ArraySetTestCase: XCTestCase {
 
     func testArray() {
         let tree = ArraySet<Int>()
-        let elements = [3,1,5,0,2,4,6]
+        let elements = [3, 1, 5, 0, 2, 4, 6]
         elements.forEach(tree.insertElement)
         XCTAssertEqual(tree.root?.left?.size, 3)
         XCTAssertEqual(tree.root?.right?.size, 3)
@@ -65,7 +65,7 @@ class ArraySetTestCase: XCTestCase {
 
     func testRemove() {
         let elements = makeElements(100)
-        elements.enumerated().forEach { index, element in
+        elements.enumerated().forEach { index, _ in
             let tree = ArraySet<Int>()
             elements.forEach(tree.insertElement)
             var sorted = elements.sorted()
@@ -84,15 +84,14 @@ class ArraySetTestCase: XCTestCase {
             elements.forEach(tree.removeElement)
             XCTAssertEqual(tree.elements, [])
         }
-
     }
 
     func testTrivial() {
         let tree = TrivialArraySet<Int>()
         tree.elements = makeElements(10000).sorted()
         measure {
-            (0..<tree.count).forEach { _ in
-                tree.removeAtIndex(tree.count/100)
+            (0 ..< tree.count).forEach { _ in
+                tree.removeAtIndex(tree.count / 100)
             }
             XCTAssertEqual(tree.elements, [])
         }

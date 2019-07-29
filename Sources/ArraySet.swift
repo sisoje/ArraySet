@@ -81,5 +81,3 @@ extension ArraySet: ArraySetProtocol {
         return root?.size ?? 0
     }
 }
-
-

@@ -6,8 +6,8 @@
 //  Copyright © 2019 lazar. All rights reserved.
 //
 
-import Foundation
 import ArraySet
+import Foundation
 
 class TrivialArraySet<T: Comparable & Equatable> {
     var elements: [T] = []
