@@ -11,7 +11,7 @@ import XCTest
 
 class ArrayExtensionsTests: XCTestCase {
     func testAscending() {
-        let arrMulti = [0,0,2,2,4,4]
+        let arrMulti = [0, 0, 2, 2, 4, 4]
 
         XCTAssertEqual(arrMulti.findInsertionIndex(of: -1, ascending: true, first: true), 0)
         XCTAssertEqual(arrMulti.findInsertionIndex(of: -1, ascending: true, first: false), 0)
@@ -52,7 +52,7 @@ class ArrayExtensionsTests: XCTestCase {
     }
 
     func testDescending() {
-        let arrMulti = [4,4,2,2,0,0]
+        let arrMulti = [4, 4, 2, 2, 0, 0]
 
         XCTAssertEqual(arrMulti.findInsertionIndex(of: -1, ascending: false, first: true), 6)
         XCTAssertEqual(arrMulti.findInsertionIndex(of: -1, ascending: false, first: false), 6)
@@ -74,7 +74,6 @@ class ArrayExtensionsTests: XCTestCase {
 
         XCTAssertEqual(arrMulti.findInsertionIndex(of: 5, ascending: false, first: true), 0)
         XCTAssertEqual(arrMulti.findInsertionIndex(of: 5, ascending: false, first: false), 0)
-
 
         XCTAssertNil(arrMulti.firstIndex(of: -1, ascending: false))
         XCTAssertEqual(arrMulti.firstIndex(of: 0, ascending: false), 4)

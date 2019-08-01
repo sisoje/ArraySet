@@ -6,8 +6,8 @@
 //  Copyright © 2019 lazar. All rights reserved.
 //
 
-import Foundation
 import ArraySet
+import Foundation
 
 public class BalancedTree<T: Comparable> {
     var root: BalancedTreeNode<T>?

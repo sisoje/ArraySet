@@ -15,13 +15,13 @@ class SortedArrayTests: XCTestCase {
         XCTAssertFalse(sortedArray.isEmpty)
         XCTAssertEqual(sortedArray.insert(2), 0)
         XCTAssertEqual(sortedArray.count, 2)
-        XCTAssertEqual(sortedArray.sortedElements, [2,3])
+        XCTAssertEqual(sortedArray.sortedElements, [2, 3])
     }
 
     func testDesc() {
         var sortedArray = SortedArray(sortedElements: [3], ascending: false)
         XCTAssertEqual(sortedArray.insert(4), 0)
-        XCTAssertEqual(sortedArray.sortedElements, [4,3])
+        XCTAssertEqual(sortedArray.sortedElements, [4, 3])
     }
 
     func testRemoveAtAsc() {
@@ -53,7 +53,7 @@ class SortedArrayTests: XCTestCase {
     }
 
     func testIndexOfAsc() {
-        let sortedArray = SortedArray(sortedElements: [3,3], ascending: true)
+        let sortedArray = SortedArray(sortedElements: [3, 3], ascending: true)
         XCTAssertEqual(sortedArray.firstIndex(of: 3), 0)
         XCTAssertEqual(sortedArray.lastIndex(of: 3), 1)
         XCTAssertNil(sortedArray.firstIndex(of: 1))
@@ -63,7 +63,7 @@ class SortedArrayTests: XCTestCase {
     }
 
     func testIndexOfDesc() {
-        let sortedArray = SortedArray(sortedElements: [3,3], ascending: false)
+        let sortedArray = SortedArray(sortedElements: [3, 3], ascending: false)
         XCTAssertEqual(sortedArray.firstIndex(of: 3), 0)
         XCTAssertEqual(sortedArray.lastIndex(of: 3), 1)
         XCTAssertNil(sortedArray.firstIndex(of: 1))
