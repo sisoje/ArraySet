@@ -35,14 +35,13 @@ extension ArraySet {
 }
 
 extension ArraySet: ArraySetProtocol {
-    public func removeAtIndex(_ index: Int) {
-        let node = root?.findNodeWithIndex(index)
-        node.map {
-            removeNode($0)
-        }
+    public func removeElementAtIndex(_ index: Int) -> T {
+        let node = root!.findNodeWithIndex(index)!
+        removeNode(node)
+        return node.element
     }
 
-    public func insertElement(_ element: T) {
+    public func insertElement(_ element: T) -> Int {
         let node = ArraySetNode(element: element)
         root?.insertNode(node, comparator: comparator)
         root = root ?? node
@@ -55,16 +54,18 @@ extension ArraySet: ArraySetProtocol {
         if root?.parent != nil {
             root = balanced.last
         }
+        return node.index()
     }
 
-    public func removeElement(_ element: T) {
+    public func removeElement(_ element: T) -> Int? {
         let node = root?.findNodeWithElement(element, comparator: comparator, equalizer: equalizer)
         node.map {
             removeNode($0)
         }
+        return node?.index()
     }
 
-    public func firstIndexOfElement(_ element: T) -> Int? {
+    public func indexOfElement(_ element: T) -> Int? {
         let node = root?.findNodeWithElement(element, comparator: comparator, equalizer: equalizer)
         return node?.index()
     }

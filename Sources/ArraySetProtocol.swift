@@ -13,10 +13,10 @@ public protocol ArraySetProtocol {
     var count: Int { get }
     var elements: [T] { get }
     subscript(_: Int) -> T { get }
-    func firstIndexOfElement(_ element: T) -> Int?
-    func insertElement(_ element: T)
-    func removeElement(_ element: T)
-    func removeAtIndex(_ index: Int)
+    func indexOfElement(_ element: T) -> Int?
+    mutating func insertElement(_ element: T) -> Int
+    mutating func removeElement(_ element: T) -> Int?
+    mutating func removeElementAtIndex(_ index: Int) -> T
 }
 
 public extension ArraySetProtocol {
