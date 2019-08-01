@@ -12,7 +12,9 @@ import XCTest
 class SortedArrayTests: XCTestCase {
     func testInsertAsc() {
         var sortedArray = SortedArray(sortedElements: [3], ascending: true)
+        XCTAssertFalse(sortedArray.isEmpty)
         XCTAssertEqual(sortedArray.insert(2), 0)
+        XCTAssertEqual(sortedArray.count, 2)
         XCTAssertEqual(sortedArray.sortedElements, [2,3])
     }
 
@@ -38,6 +40,8 @@ class SortedArrayTests: XCTestCase {
         var sortedArray = SortedArray(sortedElements: [3], ascending: true)
         XCTAssertEqual(sortedArray.remove(3), 0)
         XCTAssertNil(sortedArray.remove(3))
+        XCTAssertEqual(sortedArray.count, 0)
+        XCTAssert(sortedArray.isEmpty)
         XCTAssertEqual(sortedArray.sortedElements, [])
     }
 

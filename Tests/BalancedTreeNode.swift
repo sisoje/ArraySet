@@ -8,19 +8,19 @@
 
 import Foundation
 
-final class ArraySetNode<T> {
+final class BalancedTreeNode<T: Comparable> {
     var size: Int
     var element: T
-    var left: ArraySetNode?
-    var right: ArraySetNode?
-    weak var parent: ArraySetNode?
+    var left: BalancedTreeNode?
+    var right: BalancedTreeNode?
+    weak var parent: BalancedTreeNode?
     init(element: T, size: Int = 1) {
         self.element = element
         self.size = size
     }
 }
 
-extension ArraySetNode {
+extension BalancedTreeNode {
     static func level(size: Int) -> Double {
         return log2(Double(1 + size))
     }
@@ -37,11 +37,11 @@ extension ArraySetNode {
         return parent.map { 1 + $0.distanceToRoot } ?? 0
     }
 
-    var pathToRoot: [ArraySetNode] {
+    var pathToRoot: [BalancedTreeNode] {
         return parent.map { [$0] + $0.pathToRoot } ?? []
     }
 
-    func rotateLeft() -> ArraySetNode {
+    func rotateLeft() -> BalancedTreeNode {
         let newTop = right!
         let oldTop = self
         oldTop.replaceInParent(newTop)
@@ -56,7 +56,7 @@ extension ArraySetNode {
         return newTop
     }
 
-    func rotateRight() -> ArraySetNode {
+    func rotateRight() -> BalancedTreeNode {
         let newTop = left!
         let oldTop = self
         oldTop.replaceInParent(newTop)
@@ -72,17 +72,17 @@ extension ArraySetNode {
     }
 
     var needsBalance: Bool {
-        return abs(ArraySetNode.level(size: sizeLeft) - ArraySetNode.level(size: sizeRight)) >= 2
+        return abs(BalancedTreeNode.level(size: sizeLeft) - BalancedTreeNode.level(size: sizeRight)) >= 2
     }
 
-    func rotate() -> ArraySetNode {
+    func rotate() -> BalancedTreeNode {
         return sizeRight > sizeLeft ? rotateLeft() : rotateRight()
     }
 
-    func insertNode(_ node: ArraySetNode, comparator: (T, T) -> Bool) {
-        let isLeft = comparator(node.element, element)
+    func insertNode(_ node: BalancedTreeNode) {
+        let isLeft = node.element < element
         if let child = isLeft ? left : right {
-            child.insertNode(node, comparator: comparator)
+            child.insertNode(node)
             return
         }
         if isLeft {
@@ -93,11 +93,11 @@ extension ArraySetNode {
         node.parent = self
     }
 
-    func maxNode() -> ArraySetNode {
+    func maxNode() -> BalancedTreeNode {
         return right?.maxNode() ?? self
     }
 
-    func minNode() -> ArraySetNode {
+    func minNode() -> BalancedTreeNode {
         return left?.minNode() ?? self
     }
 
@@ -113,7 +113,7 @@ extension ArraySetNode {
         }
     }
 
-    func replaceInParent(_ node: ArraySetNode?) {
+    func replaceInParent(_ node: BalancedTreeNode?) {
         if parent?.left === self {
             parent?.left = node
         }
@@ -123,7 +123,7 @@ extension ArraySetNode {
         node?.parent = parent
     }
 
-    func findNodeWithIndex(_ index: Int) -> ArraySetNode? {
+    func findNodeWithIndex(_ index: Int) -> BalancedTreeNode? {
         let sizeLeft = left?.size ?? 0
         if sizeLeft == index {
             return self
@@ -134,13 +134,13 @@ extension ArraySetNode {
         return right?.findNodeWithIndex(index - sizeLeft - 1)
     }
 
-    func findNodeWithElement(_ element: T, comparator: (T, T) -> Bool, equalizer: (T, T) -> Bool) -> ArraySetNode? {
-        if equalizer(element, self.element) {
+    func findNodeWithElement(_ element: T) -> BalancedTreeNode? {
+        if element == self.element {
             return self
         }
-        let isLeft = comparator(element, self.element)
+        let isLeft = element < self.element
         let child = isLeft ? left : right
-        return child?.findNodeWithElement(element, comparator: comparator, equalizer: equalizer)
+        return child?.findNodeWithElement(element)
     }
 
     func elements() -> [T] {

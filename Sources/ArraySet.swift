@@ -8,77 +8,56 @@
 
 import Foundation
 
-public class ArraySet<T> {
-    var root: ArraySetNode<T>?
-    let comparator: (T, T) -> Bool
-    let equalizer: (T, T) -> Bool
+public protocol ArraySetProtocol: RandomAccessCollection where Element: Comparable {
+    var elements: [Element] { get }
+    func index(of element: Element) -> Int?
+    mutating func insert(_ element: Element) -> Int
+    mutating func remove(_ element: Element) -> Int?
+    mutating func remove(at index: Int) -> Element
+}
 
-    public init(comparator: @escaping (T, T) -> Bool, equalizer: @escaping (T, T) -> Bool) {
-        self.comparator = comparator
-        self.equalizer = equalizer
+public struct ArraySet<T: Comparable> {
+    public private(set) var sortedArray: SortedArray<T>
+    public init(sortedArray: SortedArray<T>) {
+        self.sortedArray = sortedArray
     }
 }
 
-public extension ArraySet where T: Comparable {
-    convenience init() {
-        self.init(comparator: <, equalizer: ==)
+extension ArraySet: RandomAccessCollection {
+    public var startIndex: Int {
+        return 0
     }
-}
 
-extension ArraySet {
-    func removeNode(_ node: ArraySetNode<T>) {
-        node.remove()
-        if root?.size == 0 {
-            root = nil
-        }
+    public var endIndex: Int {
+        return sortedArray.count
+    }
+
+    public subscript(_ index: Int) -> T {
+        return sortedArray[index]
     }
 }
 
 extension ArraySet: ArraySetProtocol {
-    public func removeElementAtIndex(_ index: Int) -> T {
-        let node = root!.findNodeWithIndex(index)!
-        removeNode(node)
-        return node.element
-    }
-
-    public func insertElement(_ element: T) -> Int {
-        let node = ArraySetNode(element: element)
-        root?.insertNode(node, comparator: comparator)
-        root = root ?? node
-        node.parent?.addSize(1)
-        let pathToRoot = node.pathToRoot
-        let nodesNeedBalancing = pathToRoot.filter { $0.needsBalance }
-        let balanced = nodesNeedBalancing.map {
-            $0.rotate()
-        }
-        if root?.parent != nil {
-            root = balanced.last
-        }
-        return node.index()
-    }
-
-    public func removeElement(_ element: T) -> Int? {
-        let node = root?.findNodeWithElement(element, comparator: comparator, equalizer: equalizer)
-        node.map {
-            removeNode($0)
-        }
-        return node?.index()
-    }
-
-    public func indexOfElement(_ element: T) -> Int? {
-        let node = root?.findNodeWithElement(element, comparator: comparator, equalizer: equalizer)
-        return node?.index()
-    }
-
-    public subscript(_ index: Int) -> T {
-        return root!.findNodeWithIndex(index)!.element
-    }
-
     public var elements: [T] {
-        return root?.elements() ?? []
+        return sortedArray.sortedElements
     }
 
-    public var count: Int {
-        return root?.size ?? 0
+    public mutating func remove(at index: Int) -> T {
+        return sortedArray.remove(at: index)
+    }
+
+    public func index(of element: T) -> Int? {
+        return sortedArray.firstIndex(of: element)
+    }
+
+    public mutating func insert(_ element: T) -> Int {
+        guard let index = sortedArray.firstIndex(of: element) else {
+            return sortedArray.insert(element)
+        }
+        return index
+    }
+
+    public mutating func remove(_ element: T) -> Int? {
+        return sortedArray.remove(element)
     }
 }

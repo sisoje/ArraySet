@@ -13,17 +13,17 @@ class ArraySetTestCase: XCTestCase {
     func testBalance() {
         for N in 1 ... 10 {
             let elements = Array(1 ..< (1 << N))
-            let arraySet = ArraySet<Int>()
-            elements.forEach { arraySet.insertElement($0) }
+            let arraySet = BalancedTree<Int>()
+            elements.forEach { arraySet.insert($0) }
             let distances: [Int] = elements.map {
-                arraySet.root!.findNodeWithElement($0, comparator: arraySet.comparator, equalizer: arraySet.equalizer)!.distanceToRoot
+                arraySet.root!.findNodeWithElement($0)!.distanceToRoot
             }
             XCTAssertLessThan(distances.max()!, 2 * N)
         }
     }
 
     func testEmpty() {
-        let arraySet = ArraySet<Int>()
+        let arraySet = BalancedTree<Int>()
         XCTAssertNil(arraySet.root)
         XCTAssertEqual(arraySet.count, 0)
         XCTAssert(arraySet.isEmpty)
@@ -31,15 +31,15 @@ class ArraySetTestCase: XCTestCase {
     }
 
     func testOne() {
-        let arraySet = ArraySet<Int>()
+        let arraySet = BalancedTree<Int>()
         let elements = [1]
-        elements.forEach { arraySet.insertElement($0) }
+        elements.forEach { arraySet.insert($0) }
         XCTAssertFalse(arraySet.isEmpty)
         XCTAssertEqual(arraySet.count, elements.count)
         XCTAssertEqual(arraySet.elements, elements)
         XCTAssertEqual(arraySet[0], elements[0])
-        XCTAssertEqual(arraySet.indexOfElement(elements[0]), 0)
-        arraySet.removeElement(elements[0])
+        XCTAssertEqual(arraySet.index(of: elements[0]), 0)
+        arraySet.remove(elements[0])
         XCTAssertNil(arraySet.root)
         XCTAssertEqual(arraySet.count, 0)
         XCTAssert(arraySet.isEmpty)
@@ -49,12 +49,12 @@ class ArraySetTestCase: XCTestCase {
     func testSmallArray() {
         let elements = [3, 1, 5, 0, 2, 4, 6]
         let sorted = [0, 1, 2, 3, 4, 5, 6]
-        let arraySet = ArraySet<Int>()
-        elements.forEach { arraySet.insertElement($0) }
+        let arraySet = BalancedTree<Int>()
+        elements.forEach { arraySet.insert($0) }
         XCTAssertEqual(arraySet.elements, sorted)
         sorted.enumerated().forEach { index, element in
             XCTAssertEqual(arraySet[index], element)
-            XCTAssertEqual(arraySet.indexOfElement(element), index)
+            XCTAssertEqual(arraySet.index(of: element), index)
         }
         XCTAssertEqual(arraySet.root?.left?.size, 3)
         XCTAssertEqual(arraySet.root?.right?.size, 3)
@@ -63,10 +63,10 @@ class ArraySetTestCase: XCTestCase {
     func testRemove() {
         let elements = [Int].makeRandom(100)
         elements.enumerated().forEach { index, _ in
-            let tree = ArraySet<Int>()
-            elements.forEach { tree.insertElement($0) }
+            let tree = BalancedTree<Int>()
+            elements.forEach { tree.insert($0) }
             var sorted = elements.sorted()
-            tree.removeElement(sorted[index])
+            tree.remove(sorted[index])
             sorted.remove(at: index)
             XCTAssertEqual(tree.elements, sorted)
         }
@@ -74,11 +74,11 @@ class ArraySetTestCase: XCTestCase {
 
     func testLargeArraySet() {
         let elements = [Int].makeRandom(1000)
-        let tree = ArraySet<Int>()
+        let tree = BalancedTree<Int>()
         measure {
-            elements.forEach { tree.insertElement($0) }
+            elements.forEach { tree.insert($0) }
             XCTAssertEqual(tree.elements, elements.sorted())
-            elements.forEach { tree.removeElement($0) }
+            elements.forEach { tree.remove($0) }
             XCTAssertEqual(tree.elements, [])
         }
     }
@@ -86,11 +86,11 @@ class ArraySetTestCase: XCTestCase {
     func testLargeArraySetTrivial() {
         let elements = [Int].makeRandom(1000)
 
-        var tree = ArrayBackedArraySet<Int>(sortedArray: SortedArray<Int>(sortedElements: [], ascending: true))
+        var tree = ArraySet<Int>(sortedArray: SortedArray<Int>(sortedElements: [], ascending: true))
         measure {
-            elements.forEach { tree.insertElement($0) }
+            elements.forEach { tree.insert($0) }
             XCTAssertEqual(tree.elements, elements.sorted())
-            elements.forEach { tree.removeElement($0) }
+            elements.forEach { tree.remove($0) }
             XCTAssertEqual(tree.elements, [])
         }
     }
