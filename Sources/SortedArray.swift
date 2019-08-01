@@ -16,13 +16,19 @@ public protocol SortedArrayProtocol: RandomAccessCollection where Element: Compa
     func lastIndex(of element: Element) -> Int?
 }
 
+public extension SortedArrayProtocol {
+    var areElementsUnique: Bool {
+        return first.map { reduce((true, $0)) { ($0.0 && $0.1 != $1, $1) }.0 } ?? true
+    }
+}
+
 public struct SortedArray<Element: Comparable> {
     public let ascending: Bool
     public private(set) var sortedElements: [Element]
 }
 
 public extension SortedArray {
-    init(sortedElements: [Element], ascending: Bool) {
+    init(sortedElements: [Element] = [], ascending: Bool = true) {
         assert(sortedElements.isSorted(ascending: ascending))
         self.sortedElements = sortedElements
         self.ascending = ascending

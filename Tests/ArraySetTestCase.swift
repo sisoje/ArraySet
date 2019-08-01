@@ -84,14 +84,10 @@ class ArraySetTestCase: XCTestCase {
     }
 
     func testLargeArraySetTrivial() {
-        let elements = [Int].makeRandom(1000)
-
-        var tree = ArraySet<Int>(sortedArray: SortedArray<Int>(sortedElements: [], ascending: true))
-        measure {
-            elements.forEach { tree.insert($0) }
-            XCTAssertEqual(tree.elements, elements.sorted())
-            elements.forEach { tree.remove($0) }
-            XCTAssertEqual(tree.elements, [])
+        var arraySet = ArraySet<Int>()
+        [1, 0, 2].forEach {
+            arraySet.insert($0)
         }
+        XCTAssertEqual(arraySet.elements, [0, 1, 2])
     }
 }

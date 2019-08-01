@@ -18,7 +18,8 @@ public protocol ArraySetProtocol: RandomAccessCollection where Element: Comparab
 
 public struct ArraySet<T: Comparable> {
     public private(set) var sortedArray: SortedArray<T>
-    public init(sortedArray: SortedArray<T>) {
+    public init(sortedArray: SortedArray<T> = SortedArray()) {
+        assert(sortedArray.areElementsUnique)
         self.sortedArray = sortedArray
     }
 }
@@ -42,14 +43,16 @@ extension ArraySet: ArraySetProtocol {
         return sortedArray.sortedElements
     }
 
-    public mutating func remove(at index: Int) -> T {
-        return sortedArray.remove(at: index)
-    }
-
     public func index(of element: T) -> Int? {
         return sortedArray.firstIndex(of: element)
     }
 
+    @discardableResult
+    public mutating func remove(at index: Int) -> T {
+        return sortedArray.remove(at: index)
+    }
+
+    @discardableResult
     public mutating func insert(_ element: T) -> Int {
         guard let index = sortedArray.firstIndex(of: element) else {
             return sortedArray.insert(element)
@@ -57,6 +60,7 @@ extension ArraySet: ArraySetProtocol {
         return index
     }
 
+    @discardableResult
     public mutating func remove(_ element: T) -> Int? {
         return sortedArray.remove(element)
     }
