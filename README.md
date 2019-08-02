@@ -57,7 +57,7 @@ protocol ArraySetProtocol:
 ### Exmple:
 ```
 var arraySet = ArraySet<Int>()
-[1, 0, 2].forEach {
+[1, 2, 0, 2].forEach {
     arraySet.insert($0)
 }
 XCTAssertEqual(arraySet.elements, [0, 1, 2])
