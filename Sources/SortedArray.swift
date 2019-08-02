@@ -8,32 +8,26 @@
 
 import Foundation
 
-public protocol SortedArrayProtocol: RandomAccessCollection where Element: Comparable {
-    mutating func insert(_ element: Element) -> Int
-    mutating func remove(_ element: Element) -> Int?
-    mutating func remove(at index: Int) -> Element
-    func firstIndex(of element: Element) -> Int?
-    func lastIndex(of element: Element) -> Int?
-}
-
-public extension SortedArrayProtocol {
-    var areElementsUnique: Bool {
-        return first.map { reduce((true, $0)) { ($0.0 && $0.1 != $1, $1) }.0 } ?? true
-    }
-}
-
-public struct SortedArray<Element: Comparable> {
-    public let ascending: Bool
+public struct SortedArray<Element: Comparable>: SortedCollection {
     public private(set) var sortedElements: [Element]
-}
+    public let ascending: Bool
 
-public extension SortedArray {
-    init(sortedElements: [Element] = [], ascending: Bool = true) {
+    public init(sortedElements: [Element] = [], ascending: Bool = true) {
         assert(sortedElements.isSorted(ascending: ascending))
         self.sortedElements = sortedElements
         self.ascending = ascending
     }
 }
+
+// MARK: - public extension methods
+
+public extension SortedArray {
+    var areElementsUnique: Bool {
+        return first.map { reduce((true, $0)) { ($0.0 && $0.1 != $1, $1) }.0 } ?? true
+    }
+}
+
+// MARK: - RandomAccessCollection
 
 extension SortedArray: RandomAccessCollection {
     public subscript(_ index: Int) -> Element {
@@ -49,7 +43,9 @@ extension SortedArray: RandomAccessCollection {
     }
 }
 
-extension SortedArray: SortedArrayProtocol {
+// MARK: - IndexReversableCollection
+
+extension SortedArray: IndexReversableCollection {
     public func firstIndex(of element: Element) -> Int? {
         return sortedElements.firstIndex(of: element, ascending: ascending)
     }
@@ -57,7 +53,11 @@ extension SortedArray: SortedArrayProtocol {
     public func lastIndex(of element: Element) -> Int? {
         return sortedElements.lastIndex(of: element, ascending: ascending)
     }
+}
 
+// MARK: - MutableIndexReversableCollection
+
+extension SortedArray: MutableIndexReversableCollection {
     @discardableResult
     public mutating func insert(_ element: Element) -> Int {
         let index = sortedElements.findInsertionIndex(of: element, ascending: ascending, first: false)
@@ -67,11 +67,10 @@ extension SortedArray: SortedArrayProtocol {
 
     @discardableResult
     public mutating func remove(_ element: Element) -> Int? {
-        guard let index = lastIndex(of: element) else {
-            return nil
+        return lastIndex(of: element).map {
+            sortedElements.remove(at: $0)
+            return $0
         }
-        sortedElements.remove(at: index)
-        return index
     }
 
     @discardableResult

@@ -8,21 +8,24 @@
 
 import Foundation
 
-public protocol ArraySetProtocol: RandomAccessCollection where Element: Comparable {
-    var elements: [Element] { get }
-    func index(of element: Element) -> Int?
-    mutating func insert(_ element: Element) -> Int
-    mutating func remove(_ element: Element) -> Int?
-    mutating func remove(at index: Int) -> Element
-}
+public struct ArraySet<Element: Comparable> {
+    public private(set) var sortedArray: SortedArray<Element>
 
-public struct ArraySet<T: Comparable> {
-    public private(set) var sortedArray: SortedArray<T>
-    public init(sortedArray: SortedArray<T> = SortedArray()) {
+    public init(sortedArray: SortedArray<Element> = SortedArray()) {
         assert(sortedArray.areElementsUnique)
         self.sortedArray = sortedArray
     }
 }
+
+// MARK: - SortedCollection
+
+extension ArraySet: SortedCollection {
+    public var sortedElements: [Element] {
+        return sortedArray.sortedElements
+    }
+}
+
+// MARK: - RandomAccessCollection
 
 extension ArraySet: RandomAccessCollection {
     public var startIndex: Int {
@@ -33,35 +36,34 @@ extension ArraySet: RandomAccessCollection {
         return sortedArray.count
     }
 
-    public subscript(_ index: Int) -> T {
+    public subscript(_ index: Int) -> Element {
         return sortedArray[index]
     }
 }
 
-extension ArraySet: ArraySetProtocol {
-    public var elements: [T] {
-        return sortedArray.sortedElements
-    }
+// MARK: - UniqueIndexReversableCollection
 
-    public func index(of element: T) -> Int? {
+extension ArraySet: UniqueIndexReversableCollection {
+    public func index(of element: Element) -> Int? {
         return sortedArray.firstIndex(of: element)
     }
+}
 
+// MARK: - MutableIndexReversableCollection
+
+extension ArraySet: MutableIndexReversableCollection {
     @discardableResult
-    public mutating func remove(at index: Int) -> T {
+    public mutating func remove(at index: Int) -> Element {
         return sortedArray.remove(at: index)
     }
 
     @discardableResult
-    public mutating func insert(_ element: T) -> Int {
-        guard let index = sortedArray.firstIndex(of: element) else {
-            return sortedArray.insert(element)
-        }
-        return index
+    public mutating func insert(_ element: Element) -> Int {
+        return sortedArray.firstIndex(of: element) ?? sortedArray.insert(element)
     }
 
     @discardableResult
-    public mutating func remove(_ element: T) -> Int? {
+    public mutating func remove(_ element: Element) -> Int? {
         return sortedArray.remove(element)
     }
 }

@@ -40,7 +40,7 @@ extension BalancedTree: RandomAccessCollection {
     }
 }
 
-extension BalancedTree: ArraySetProtocol {
+extension BalancedTree: SortedCollection {
     public func remove(at index: Int) -> T {
         let node = root!.findNodeWithIndex(index)!
         removeNode(node)
@@ -76,7 +76,7 @@ extension BalancedTree: ArraySetProtocol {
         return node?.index()
     }
 
-    public var elements: [T] {
+    public var sortedElements: [T] {
         return root?.elements() ?? []
     }
 }
