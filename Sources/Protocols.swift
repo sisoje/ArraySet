@@ -8,6 +8,8 @@
 
 import Foundation
 
+// MARK: - basic protocols
+
 public protocol SortedCollection {
     associatedtype Element: Comparable
     var sortedElements: [Element] { get }
@@ -31,6 +33,16 @@ public protocol UniqueIndexReversableCollection {
     func index(of element: Element) -> Int?
 }
 
+// MARK: - compounded protocols
 
-protocol SortedArrayProtocol: RandomAccessCollection, SortedCollection, MutableIndexReversableCollection, IndexReversableCollection {}
-protocol ArraySetProtocol: RandomAccessCollection, SortedCollection, MutableIndexReversableCollection, UniqueIndexReversableCollection {}
+protocol SortedArrayProtocol:
+    RandomAccessCollection,
+    SortedCollection,
+    MutableIndexReversableCollection,
+    IndexReversableCollection {}
+
+protocol ArraySetProtocol:
+    RandomAccessCollection,
+    SortedCollection,
+    MutableIndexReversableCollection,
+    UniqueIndexReversableCollection {}
