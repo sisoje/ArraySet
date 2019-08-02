@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ArraySet<Element: Comparable> {
+public struct ArraySet<Element: Comparable>: ArraySetProtocol {
     public private(set) var sortedArray: SortedArray<Element>
 
     public init(sortedArray: SortedArray<Element> = SortedArray()) {

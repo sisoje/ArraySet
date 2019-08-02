@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct SortedArray<Element: Comparable>: SortedCollection {
+public struct SortedArray<Element: Comparable>: SortedArrayProtocol {
     public private(set) var sortedElements: [Element]
     public let ascending: Bool
 

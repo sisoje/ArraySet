@@ -30,3 +30,7 @@ public protocol UniqueIndexReversableCollection {
     associatedtype Element
     func index(of element: Element) -> Int?
 }
+
+
+protocol SortedArrayProtocol: RandomAccessCollection, SortedCollection, MutableIndexReversableCollection, IndexReversableCollection {}
+protocol ArraySetProtocol: RandomAccessCollection, SortedCollection, MutableIndexReversableCollection, UniqueIndexReversableCollection {}
