@@ -37,12 +37,14 @@ public protocol UniqueIndexReversableCollection {
 
 protocol SortedArrayProtocol:
     RandomAccessCollection,
+    Equatable,
     SortedCollection,
     MutableIndexReversableCollection,
     IndexReversableCollection {}
 
 protocol ArraySetProtocol:
     RandomAccessCollection,
+    Equatable,
     SortedCollection,
     MutableIndexReversableCollection,
     UniqueIndexReversableCollection {}

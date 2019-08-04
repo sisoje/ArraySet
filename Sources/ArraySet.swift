@@ -9,11 +9,15 @@
 import Foundation
 
 public struct ArraySet<Element: Comparable>: ArraySetProtocol {
-    public private(set) var sortedArray: SortedArray<Element>
+    public private(set) var sortedArrayWithoutDuplicates: SortedArray<Element>
 
-    public init(sortedArray: SortedArray<Element> = SortedArray()) {
-        assert(sortedArray.areElementsUnique)
-        self.sortedArray = sortedArray
+    public init(sortedArrayWithoutDuplicates: SortedArray<Element> = SortedArray()) {
+        self.sortedArrayWithoutDuplicates = sortedArrayWithoutDuplicates
+    }
+
+    public init<S: Sequence>(elements: S, ascending: Bool = true) where S.Element == Element {
+        sortedArrayWithoutDuplicates = SortedArray(elements: elements, ascending: ascending)
+        sortedArrayWithoutDuplicates.removeDuplicates()
     }
 }
 
@@ -21,7 +25,7 @@ public struct ArraySet<Element: Comparable>: ArraySetProtocol {
 
 extension ArraySet: SortedCollection {
     public var sortedElements: [Element] {
-        return sortedArray.sortedElements
+        return sortedArrayWithoutDuplicates.sortedElements
     }
 }
 
@@ -33,11 +37,11 @@ extension ArraySet: RandomAccessCollection {
     }
 
     public var endIndex: Int {
-        return sortedArray.count
+        return sortedArrayWithoutDuplicates.count
     }
 
     public subscript(_ index: Int) -> Element {
-        return sortedArray[index]
+        return sortedArrayWithoutDuplicates[index]
     }
 }
 
@@ -45,7 +49,7 @@ extension ArraySet: RandomAccessCollection {
 
 extension ArraySet: UniqueIndexReversableCollection {
     public func index(of element: Element) -> Int? {
-        return sortedArray.firstIndex(of: element)
+        return sortedArrayWithoutDuplicates.firstIndex(of: element)
     }
 }
 
@@ -54,16 +58,16 @@ extension ArraySet: UniqueIndexReversableCollection {
 extension ArraySet: MutableIndexReversableCollection {
     @discardableResult
     public mutating func remove(at index: Int) -> Element {
-        return sortedArray.remove(at: index)
+        return sortedArrayWithoutDuplicates.remove(at: index)
     }
 
     @discardableResult
     public mutating func insert(_ element: Element) -> Int {
-        return sortedArray.firstIndex(of: element) ?? sortedArray.insert(element)
+        return sortedArrayWithoutDuplicates.firstIndex(of: element) ?? sortedArrayWithoutDuplicates.insert(element)
     }
 
     @discardableResult
     public mutating func remove(_ element: Element) -> Int? {
-        return sortedArray.remove(element)
+        return sortedArrayWithoutDuplicates.remove(element)
     }
 }

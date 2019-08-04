@@ -10,9 +10,15 @@ import ArraySet
 import XCTest
 
 class SortedArrayTests: XCTestCase {
+    func testBasic() {
+        let sortedArray = SortedArray(elements: [1, 2, 1])
+        XCTAssertEqual(sortedArray.sortedElements, [1, 1, 2])
+    }
+
     func testInsertAsc() {
         var sortedArray = SortedArray(sortedElements: [3], ascending: true)
         XCTAssertFalse(sortedArray.isEmpty)
+        XCTAssertEqual(sortedArray.count, 1)
         XCTAssertEqual(sortedArray.insert(2), 0)
         XCTAssertEqual(sortedArray.count, 2)
         XCTAssertEqual(sortedArray.sortedElements, [2, 3])
@@ -73,7 +79,7 @@ class SortedArrayTests: XCTestCase {
     }
 
     func testCollectionAsc() {
-        let sortedArray = SortedArray(sortedElements: [3], ascending: true)
+        let sortedArray = SortedArray(sortedElements: [3, 3], ascending: true)
         sortedArray.forEach {
             XCTAssertEqual($0, 3)
         }
@@ -83,7 +89,7 @@ class SortedArrayTests: XCTestCase {
     }
 
     func testCollectionDesc() {
-        let sortedArray = SortedArray(sortedElements: [3], ascending: false)
+        let sortedArray = SortedArray(sortedElements: [3, 3], ascending: false)
         sortedArray.forEach {
             XCTAssertEqual($0, 3)
         }

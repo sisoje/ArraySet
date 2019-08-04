@@ -13,8 +13,12 @@ public struct SortedArray<Element: Comparable>: SortedArrayProtocol {
     public let ascending: Bool
 
     public init(sortedElements: [Element] = [], ascending: Bool = true) {
-        assert(sortedElements.isSorted(ascending: ascending))
         self.sortedElements = sortedElements
+        self.ascending = ascending
+    }
+
+    public init<S: Sequence>(elements: S, ascending: Bool = true) where S.Element == Element {
+        sortedElements = ascending ? elements.sorted(by: <) : elements.sorted(by: >)
         self.ascending = ascending
     }
 }
@@ -22,8 +26,8 @@ public struct SortedArray<Element: Comparable>: SortedArrayProtocol {
 // MARK: - public extension methods
 
 public extension SortedArray {
-    var areElementsUnique: Bool {
-        return first.map { reduce((true, $0)) { ($0.0 && $0.1 != $1, $1) }.0 } ?? true
+    mutating func removeDuplicates() {
+        sortedElements.mergeNeigbours()
     }
 }
 

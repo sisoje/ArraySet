@@ -30,6 +30,20 @@ extension Array where Element: Comparable {
             findInsertionIndex(of: element, sortedBy: <, first: first) :
             findInsertionIndex(of: element, sortedBy: >, first: first)
     }
+
+    mutating func mergeNeigbours() {
+        guard count > 1 else {
+            return
+        }
+        var dst = 0
+        (1 ..< count).forEach { src in
+            if self[src] != self[dst] {
+                dst += 1
+                self[dst] = self[src]
+            }
+        }
+        removeLast(count - dst - 1)
+    }
 }
 
 private extension Array where Element: Comparable {

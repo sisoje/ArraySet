@@ -54,11 +54,17 @@ protocol ArraySetProtocol:
 
 ```
 
-### Exmple:
+### Exmples:
+Using ArraySet:
+
 ```
-var arraySet = ArraySet<Int>()
-[1, 2, 0, 2].forEach {
-    arraySet.insert($0)
-}
-XCTAssertEqual(arraySet.elements, [0, 1, 2])
+        let arraySet = ArraySet(elements: [1, 2, 0, 2])
+        XCTAssertEqual(arraySet.sortedElements, [0, 1, 2])
 ```
+Using SortedArray:
+
+```
+        let sortedArray = SortedArray(elements: [1, 2, 1])
+        XCTAssertEqual(sortedArray.sortedElements, [1, 1, 2])
+```
+        
