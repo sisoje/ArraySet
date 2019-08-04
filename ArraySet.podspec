@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'ArraySet'
-    s.version          = '1.0.3'
+    s.version          = '1.0.4'
     s.summary          = 'Enables swift package and pod togehter.'
 
     s.description      = <<-DESC
